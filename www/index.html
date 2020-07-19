@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>myIndex</title>
+    <script src="./jQuery/js/jquery.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            /*与页面顶端距离*/
+            padding-top: 56px;
+        }
+        
+        .portfolio-item {
+            /*边框距离*/
+            margin-bottom: 30px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top  bg-primary navbar-dark">
+        <a class="navbar-brand" href="https://github.com/onroadmuwl">Author:牟文龙</a>
+        <ul class="navbar-nav mr-auto">
+            <!--居右对齐 mr-auto：居左对齐-->
+            <li>
+                <a class="nav-link" href="./">商品页面</a>
+            </li>
+            <li>
+                <a class="nav-link" href="./user">我的账户</a>
+            </li>
+            <li>
+                <a class="nav-link" href="./login">退出登录</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto" style="font-size: 20px;">
+            <!--居右对齐 mr-auto：居左对齐-->
+            <li>
+                <label>当前用户：</label>
+            </li>
+            <li>
+                <div id="userName"></div>
+            </li>
+
+        </ul>
+    </nav>
+    <br><br>
+    <center>
+        <h2>历史人文书城</h2><br>
+    </center>
+    <!-- 以下是商品内容 -->
+    <div class="container">
+
+        <div class="row" id="goodInformation">
+
+        </div>
+    </div>
+    <!-- 以上是商品内容 -->
+
+    <!-- 以下是模态框（Modal） -->
+    <div id="MymodalSets">
+
+    </div>
+    <!-- 以上是模态框（Modal） -->
+
+
+    <!-- 以下是尾部-->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">20171040018 电子商务 牟文龙</p>
+        </div>
+    </footer>
+    <!-- 以上是尾部-->
+</body>
+
+</html>
+<script>
+    /*以下为购买行为*/
+    function btnAction(num) {
+        if (AllData[num]["RemainNumber"] == 0) {
+            alert("这本书卖完啦！")
+        } else {
+            var message = "是否确认购买？"
+            if (confirm(message)) {
+                var now = new Date();
+                var year = now.getFullYear();
+                var month = now.getMonth() + 1;
+                var date = now.getDate();
+                var hh = now.getHours(); //截取小时 
+                var mm = now.getMinutes();
+                var times = year + "-" + month + "-" + date + " " + hh + ":" + mm;
+                var Remains = AllData[num]["RemainNumber"] - 1;
+                $.ajax({
+                    url: 'book/books_updateNum',
+                    type: 'post',
+                    data: {
+                        BookId: AllData[num]["BookId"],
+                        RemainNumber: Remains
+                    },
+                    success: function(res) {
+                        if (res.msg == 'wrong') {
+                            alert("数据库错误");
+                        } else if (res.msg == 'success') {
+                            $.ajax({
+                                url: 'book/books_buy',
+                                type: 'post',
+                                data: {
+                                    BookId: AllData[num]["BookId"],
+                                    BookName: AllData[num]["BookName"],
+                                    DiscountPrice: AllData[num]["DiscountPrice"],
+                                    BuyTime: times,
+                                    CONSUMER: user
+                                },
+                                success: function(res) {
+                                    if (res.msg == 'wrong') {
+                                        alert("数据库错误");
+                                    } else if (res.msg == 'success') {
+                                        window.location.reload();
+                                        alert("购买成功");
+                                    }
+                                }
+                            })
+
+
+                        }
+
+                    }
+
+                })
+
+            }
+        }
+    }
+    /*以上为购买行为*/
+    /*以下为从数据库中动态加载*/
+
+    var j = 0;
+    var user;
+    var number;
+    var AllData;
+    $.ajax({
+        url: 'login/session',
+        type: 'get',
+        success: function(res) {
+            user = res.session;
+            if (!user) {
+                window.location.href = './login';
+            }
+            $('#userName').append(res.session);
+
+        }
+    })
+    $.ajax({
+            url: 'book/get_books',
+            type: 'get',
+            success: function(res) {
+                AllData = res;
+                var i = 0;
+                var htmls = '';
+                var modals = '';
+                number = res.length;
+                for (i = 0; i < res.length; i += 1) {
+                    var data = res[i];
+                    var bookName = JSON.stringify(data["BookName"]);
+                    var Auther = JSON.stringify(data["Auther"]);
+                    var Publisher = JSON.stringify(data["Publisher"]);
+                    var OrignalPrice = JSON.stringify(data["OrignalPrice"]);
+                    var DiscountPrice = JSON.stringify(data["DiscountPrice"]);
+                    var Introduce = JSON.stringify(data["Introduce"]);
+                    var RemainNumber = JSON.stringify(data["RemainNumber"]);
+                    htmls = htmls + '<div class="col-lg-4 col-sm-6 portfolio-item"><div class="card h-100"><div class="card-body"><h4 class="card-title"\
+                    ><label id="GoodName" class="text-primary">' + bookName + '</label></h4><p class="card-text">' + Introduce + '</p></div><div class="card-footer"><b style="font-size:22px"><label class="text-danger ">￥</label><label id="price" class="text-danger">' +
+                        DiscountPrice + '</label></b><small>￥<del id="orignal">' + OrignalPrice + '</del>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;剩余商品数量：' + RemainNumber + '</small><div class="GoodsButtons"> <button class="btn btn-primary" data-toggle="modal" data-target="#myModal' + i.toString() + '">了解更多</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-danger" id="myButton' + i.toString() + '" onclick="btnAction(' + i.toString() + ')">立即购买</button></div></div></div></div>'
+
+                    modals = modals + '<div class="modal fade" id="myModal' + i.toString() + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h3 class="modal-title" id="myModalLabel">' +
+                        bookName + '</h3></div><div class="modal-body"><p><label>作者：  </label><label>' + Auther + '</label></p><p><label>出版社：  </label><label>' +
+                        Publisher + '</label></p><p><label>剩余数量：  </label><label>' + RemainNumber + '</label></p><p><label>折后价格：  </label><label>' + DiscountPrice + '</label></p><p><label>书籍简介：  </label><label>' + Introduce + '</label></p></div>  <div class="modal-footer"><button class="btn btn-danger" id="myButtonModal' + i.toString() + '" onclick="btnAction(' + i.toString() + ')" >立即购买</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button></div></div></div></div>'
+
+                }
+                $('#goodInformation').append(htmls);
+                $('#MymodalSets').append(modals);
+
+
+
+
+            },
+            error: function() {
+                throw error;
+            }
+        })
+        /*以上为从数据库中动态加载*/
+        /*以下是从session中读取用户名*/
+
+    /*以上是从session中读取用户名*/
+</script>
