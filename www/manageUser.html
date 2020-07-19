@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>购买情况管理</title>
+    <script src="./jQuery/js/jquery.min.js"></script>
+    <script src="./bootstrap/js/bootstrap-table.min.js"></script>
+    <script src="./bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap-table.min.css">
+    <style>
+        body {
+            /*与页面顶端距离*/
+            padding-top: 56px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top  bg-light navbar-info">
+        <a class="navbar-brand" href="https://github.com/onroadmuwl">Author:牟文龙</a>
+        <ul class="navbar-nav mr-auto">
+            <!--居右对齐 mr-auto：居左对齐-->
+            <li>
+                <a class="nav-link" href="manage">书籍管理</a>
+            </li>
+            <li>
+                <a class="nav-link" href="./manageUser">购买明细</a>
+            </li>
+            <li>
+                <a class="nav-link" href="./login">退出登录</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <!--居右对齐 mr-auto：居左对齐-->
+            <li>
+                <a class="nav-link" href="#">当前为管理员模式</a>
+            </li>
+
+
+        </ul>
+    </nav>
+
+    <div class="main_content">
+        <div>
+            <br>
+
+            <center>
+                <h2>用户购买明细</h2>
+            </center>
+
+            <div>
+                <div class="col-md-6">
+                    <button class="btn btn-info" id="refresh">刷新</button></div>
+                <div class="col-md-6"></div>
+
+            </div>
+            <table class=" table table-light" id="table" data-sort-class="table-active" data-sortable="true">
+
+            </table>
+        </div>
+    </div>
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">20171040018 电子商务 牟文龙</p>
+        </div>
+    </footer>
+</body>
+
+</html>
+<script>
+    /*以下是显示信息*/
+    $('#table').bootstrapTable({
+        url: 'manageUser/get_books',
+        sidePagination: "true", //分页属性
+        striped: true, // 是否显示行间隔色
+        uniqueId: "id",
+        //pageSize: "10", //如果设置了分页，页面数据条数
+        pagination: true, // 是否分页
+        clickToSelect: true, //单选或多选框
+        search: true,
+        columns: [{
+            checkbox: true
+        }, {
+            field: 'BookId',
+            title: '书籍编号',
+            sortable: "true"
+
+        }, {
+            field: 'BookName',
+            title: '书籍名称名称',
+            sortable: "true"
+
+        }, {
+            field: 'DiscountPrice',
+            title: '折扣后价格(元)',
+            sortable: "true"
+
+        }, {
+            field: 'CONSUMER',
+            title: '付款人',
+            sortable: "true"
+
+        }, {
+            field: 'BuyTime',
+            title: '购买时间',
+            sortable: "true"
+
+        }]
+    })
+
+    /*以上是显示信息*/
+
+    /*以下是刷新*/
+    $('#refresh').on('click', function() {
+            $('#table').bootstrapTable('refresh');
+        })
+        /*以上是刷新*/
+</script>
