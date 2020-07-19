@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>User</title>
+    <script src="./jQuery/js/jquery.min.js"></script>
+    <script src="./bootstrap/js/bootstrap-table.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap-table.min.css">
+    <style>
+        body {
+            /*与页面顶端距离*/
+            padding-top: 56px;
+        }
+        
+        .portfolio-item {
+            /*边框距离*/
+            margin-bottom: 30px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top  bg-primary navbar-dark">
+        <a class="navbar-brand" href="https://github.com/onroadmuwl">Author:牟文龙</a>
+        <ul class="navbar-nav mr-auto">
+            <!--居右对齐 mr-auto：居左对齐-->
+            <li>
+                <a class="nav-link" href="./">商品页面</a>
+            </li>
+            <li>
+                <a class="nav-link" href="./user">我的账户</a>
+            </li>
+            <li>
+                <a class="nav-link" href="./login">退出登录</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto" style="font-size: 20px;">
+            <!--居右对齐 mr-auto：居左对齐-->
+            <li>
+                <label>当前用户：</label>
+            </li>
+            <li>
+                <div id="userName"></div>
+            </li>
+
+
+        </ul>
+    </nav>
+
+    <br><br>
+    <!-- 以下是表格 -->
+    <center>
+        <h2>购买记录</h2><br>
+    </center>
+    <table class=" table table-light" id="table" data-sort-class="table-active" data-sortable="true">
+        <thead>
+            <tr>
+                <th>书籍编号</th>
+                <th>书籍名字</th>
+                <th>书籍价格(元)</th>
+                <th>购买时间</th>
+                <th>付款人</th>
+            </tr>
+        </thead>
+        <tbody id="TableBody">
+
+        </tbody>
+    </table>
+    <!-- 以上是表格 -->
+
+
+    <!-- 以下是尾部-->
+    <br><br><br><br><br>
+    <br>
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">20171040018 电子商务 牟文龙</p>
+        </div>
+    </footer>
+    <!-- 以上是尾部-->
+</body>
+
+</html>
+<script>
+    var user;
+    $.ajax({
+        url: 'login/session',
+        type: 'get',
+        success: function(res) {
+            user = res.session;
+            $('#userName').append(res.session);
+        }
+    })
+
+    $.ajax({
+        type: "post",
+        url: "user/get_user",
+        success: function(res) {
+            console.log(user);
+            console.log(res);
+            var i = 0;
+            var html = "";
+            for (i = 0; i < res.length; i += 1) {
+                data = res[i];
+                html = html + "<tr><td>" + data["BookId"] + "</td><td>" + data["BookName"] + "</td><td>" + data["DiscountPrice"] + "</td><td>" + data["BuyTime"] + "</td><td>" + data["CONSUMER"] + "</td></tr>"
+            }
+            $('#TableBody').append(html);
+            console.log(html);
+
+
+        }
+    })
+
+
+
+    /*以上是显示信息*/
+</script>
