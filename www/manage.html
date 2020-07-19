@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>书籍管理</title>
+    <script src="./jQuery/js/jquery.min.js"></script>
+    <script src="./bootstrap/js/bootstrap-table.min.js"></script>
+    <script src="./bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap-table.min.css">
+    <style>
+        body {
+            /*与页面顶端距离*/
+            padding-top: 56px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top  bg-light navbar-info">
+        <a class="navbar-brand" href="https://github.com/onroadmuwl">Author:牟文龙</a>
+        <ul class="navbar-nav mr-auto">
+            <!--居右对齐 mr-auto：居左对齐-->
+            <li>
+                <a class="nav-link" href="manage">书籍管理</a>
+            </li>
+            <li>
+                <a class="nav-link" href="./manageUser">购买明细</a>
+            </li>
+            <li>
+                <a class="nav-link" href="./login">退出登录</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <!--居右对齐 mr-auto：居左对齐-->
+            <li>
+                <a class="nav-link" href="#">当前为管理员模式</a>
+            </li>
+
+
+        </ul>
+    </nav>
+
+    <div class="main_content">
+        <div>
+            <br>
+
+            <center>
+                <h2>书籍管理</h2>
+            </center>
+
+            <br>
+            <div>
+                <div class="col-md-6">
+                    <button class="btn btn-info" id="refresh">刷新</button>
+                    <button class="btn btn-info" data-toggle="modal" data-target="#myModaladd" id="add">添加书籍</button>
+                    <button class="btn btn-info" data-toggle="modal" data-target="#myModalupdate" id="toUpdate">修改信息</button></div>
+                <div class="col-md-6"></div>
+                <!-- 模态框（Modal）新增 -->
+                <div class="modal fade" id="myModaladd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title" id="myModalLabel">
+                                    添加书籍信息
+                                </h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label for="code_a">书籍编号:</label></div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="code_a" id="code_a" placeholder="输入书籍编号">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label for="name_a">书籍名称:</label></div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="name_a" id="name_a" placeholder="输入书籍名称">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label for="price_a">书籍原价格:</label></div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="price_a" id="price_a" placeholder="输入书籍原价格">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label for="price_a">书籍折扣后价格:</label></div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="price_d_a" id="price_d_a" placeholder="输入书籍折扣价格">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label for="company_a">出版社:</label></div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="company_a" id="company_a" placeholder="输入书籍出版社">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label for="author_a">作者:</label></div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="author_a" id="author_a" placeholder="输入作者">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label for="Intro_a">书籍简介:</label></div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="Intro_a" id="Intro_a" placeholder="输入书籍简介">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label for="num_a">书籍数量:</label></div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="num_a" id="num_a" placeholder="输入书籍数量">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="col-md-8">
+                                    <button type="button" class="btn btn-primary" id="addData">提交</button>&nbsp;
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button></div>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal -->
+                </div>
+                <!-- 模态框（Modal）修改 -->
+                <div class="modal fade" id="myModalupdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title" id="myModalLabel_1">
+                                    修改商品信息
+                                </h3>
+                            </div>
+                            <div class="modal-body">
+                                <form id="myModalupdateForm">
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <label for="code_e">书籍编号:</label></div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="code_e" id="code_e" placeholder="输入书籍编号">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <label for="name_e">书籍名称:</label></div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="name_e" id="name_e" placeholder="输入书籍名称">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <label for="price_e">书籍原价格:</label></div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="price_e" id="price_e" placeholder="输入书籍原价格">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <label for="price_e">书籍折扣后价格:</label></div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="price_d_e" id="price_d_e" placeholder="输入书籍折扣价格">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <label for="company_e">出版社:</label></div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="company_e" id="company_e" placeholder="输入书籍出版社">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <label for="author_e">作者:</label></div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="author_e" id="author_e" placeholder="输入作者">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <label for="Intro_e">书籍简介:</label></div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="Intro_e" id="Intro_e" placeholder="输入书籍简介">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-2">
+                                            <label for="num_e">书籍数量:</label></div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="num_e" id="num_e" placeholder="输入书籍数量">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="col-md-8">
+                                    <button type="button" class="btn btn-primary" id="update">提交修改</button>&nbsp;
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button></div>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal -->
+                </div>
+
+            </div>
+            <table class=" table table-light" id="table" data-sort-class="table-active" data-sortable="true">
+
+            </table>
+        </div>
+    </div>
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">20171040018 电子商务 牟文龙</p>
+        </div>
+    </footer>
+</body>
+
+</html>
+<script>
+    /*以下是显示信息*/
+    $('#table').bootstrapTable({
+        url: 'manage/get_books',
+        sidePagination: "true", //分页属性
+        striped: true, // 是否显示行间隔色
+        uniqueId: "id",
+        //pageSize: "10", //如果设置了分页，页面数据条数
+        pagination: true, // 是否分页
+        clickToSelect: true, //单选或多选框
+        search: true,
+        columns: [{
+            checkbox: true
+        }, {
+            field: 'BookId',
+            title: '书籍编号',
+            sortable: "true"
+
+        }, {
+            field: 'BookName',
+            title: '书籍名称名称',
+            sortable: "true"
+
+        }, {
+            field: 'OrignalPrice',
+            title: '原始价格(元)',
+            sortable: "true"
+
+        }, {
+            field: 'DiscountPrice',
+            title: '折扣后价格(元)',
+            sortable: "true"
+
+        }, {
+            field: 'Publisher',
+            title: '出版社',
+            sortable: "true"
+
+        }, {
+            field: 'Auther',
+            title: '作者',
+            sortable: "true"
+
+        }, {
+            field: 'Introduce',
+            title: '简介',
+            sortable: "true"
+
+        }, {
+            field: 'RemainNumber',
+            title: '剩余数量',
+            sortable: "true"
+
+        }, {
+            field: '',
+            title: '操作',
+            width: 150,
+            align: 'center',
+            valign: 'middle',
+            formatter: function(value, row, index) {
+                return '<button type="button" class="btn btn-info del"  onclick=del(' + row.BookId + ')>删除</button>'
+            }
+        }]
+    })
+
+    /*以上是显示信息*/
+
+    /*以下是刷新*/
+    $('#refresh').on('click', function() {
+            $('#table').bootstrapTable('refresh');
+        })
+        /*以上是刷新*/
+
+
+    /*以下是新增*/
+    /*以上是新增*/
+
+    /*以下是修改*/
+    $('#toUpdate').on('click', function() {
+        var rows = $('#table').bootstrapTable('getAllSelections');
+        if (rows.length == 1) {
+            $('#myModalupdateForm #code_e').val(rows[0].BookId);
+            $('#myModalupdateForm #name_e').val(rows[0].BookName);
+            $('#myModalupdateForm #price_e').val(rows[0].OrignalPrice);
+            $('#myModalupdateForm #price_d_e').val(rows[0].DiscountPrice);
+            $('#myModalupdateForm #company_e').val(rows[0].Publisher);
+            $('#myModalupdateForm #author_e').val(rows[0].Auther);
+            $('#myModalupdateForm #Intro_e').val(rows[0].Introduce);
+            $('#myModalupdateForm #num_e').val(rows[0].RemainNumber);
+            console.log($('#myModalupdateForm').serialize());
+
+        } else {
+            alert("请选择一行数据");
+            return false;
+        }
+    })
+    $('#update').on('click', function() {
+
+        $.ajax({
+            url: 'manage/books_update',
+            type: 'post',
+            data: $('#myModalupdateForm').serialize(),
+            success: function(res) {
+                if (res.msg == 'wrong') {
+                    alert("数据库错误");
+                } else if (res.msg == 'success') {
+                    $("#myModalupdate").modal('hide');
+                    $('#table').bootstrapTable('refresh');
+                    alert("修改成功");
+
+                }
+            },
+            error: function() {
+                alert("修改异常");
+            }
+        })
+    })
+
+    /*以上是修改*/
+    /*以下是新增*/
+    $('#addData').on('click', function() {
+        var code = $('#code_a').val();
+        var name = $('#name_a').val();
+        if (code.length == 0) {
+            alert("编码不得为空");
+            return false;
+        } else if (isNaN(code)) {
+            alert("编码应为纯数字");
+            return false;
+        } else if (name.length == 0) {
+            alert("商品名称不应为空");
+            return false;
+        } else {
+            console.log($('#author_a').val());
+            $.ajax({
+                url: 'manage/books_add',
+                type: 'post',
+                data: {
+                    code_a: $('#code_a').val(),
+                    name_a: $('#name_a').val(),
+                    price_a: $('#price_a').val(),
+                    price_d_a: $('#price_d_a').val(),
+                    company_a: $('#company_a').val(),
+                    author_a: $('#author_a').val(),
+                    Intro_a: $('#Intro_a').val(),
+                    num_a: $('#num_a').val(),
+                },
+                success: function(res) {
+                    if (res.msg == 'wrong') {
+                        alert("数据库错误");
+                    } else if (res.msg == 'success') {
+                        $("#myModaladd").modal('hide');
+                        $('#table').bootstrapTable('refresh');
+                        $('#code_a').val('');
+                        $('#name_a').val('');
+                        $('#author_a').val('');
+                        $('#price_a').val('');
+                        $('#price_d_a').val('');
+                        $('#company_a').val('');
+                        $('#Intro_a').val('');
+                        $('#num_a').val('');
+                        alert("新增成功");
+
+                    }
+                },
+                error: function(err) {
+                    throw err;
+                    alert("新增异常");
+                }
+            })
+        }
+
+    })
+
+    /*以下是删除*/
+    function del(BookId) {
+        var message = "是否确认删除？删除后无法恢复！"
+        if (confirm(message)) {
+            $.ajax({
+                url: 'manage/books_del',
+                type: 'post',
+                data: {
+                    BookId: BookId
+                },
+                success: function(res) {
+                    if (res.msg == 'success') {
+                        $('#table').bootstrapTable('refresh');
+                    } else if (res.msg == 'wrong') {
+                        alert("数据库错误");
+                    }
+                },
+                error: function() {
+                    alert("ajax出错！");
+                }
+            })
+
+        } else {
+            return false;
+        }
+    }
+    /*以上是删除*/
+</script>
